@@ -1,5 +1,9 @@
 const addButton = document.querySelector(".add-button");
 const form = document.querySelector("form");
+const modal = document.querySelector("#order-modal");
+const closeButton = document.querySelector("#close-modal");
+const submitButton = document.querySelector(".submit-button");
+const modalMessage = document.querySelector("#modal-message"); 
 
 function updateBeverages() {
     const beverages = document.querySelectorAll(".beverage");
@@ -31,7 +35,6 @@ addButton.addEventListener("click", () => {
     });
 
     form.insertBefore(newBeverage, addButton.parentElement);
-
     updateBeverages();
 });
 
@@ -42,17 +45,29 @@ form.addEventListener("click", (e) => {
         if (beverages.length <= 1) return;
 
         e.target.closest(".remove-beverage").closest(".beverage").remove();
-
         updateBeverages();
     }
 });
 
-const modal = document.querySelector("#order-modal");
-const closeButton = document.querySelector("#close-modal");
-const submitButton = document.querySelector(".submit-button");
+function getDrinkDeclension(count) {
+    const lastTwoDigits = count % 100;
+    const lastDigit = count % 10;
+
+    if (lastTwoDigits > 10 && lastTwoDigits < 20) return "напитков";
+    
+    if (lastDigit === 1) return "напиток";
+    if (lastDigit >= 2 && lastDigit <= 4) return "напитка";
+    
+    return "напитков";
+}
 
 submitButton.onclick = function (event) {
     event.preventDefault();
+    
+    const beverageCount = document.querySelectorAll(".beverage").length;
+    const declension = getDrinkDeclension(beverageCount);
+    
+    modalMessage.textContent = `Вы заказали ${beverageCount} ${declension}`;
     modal.showModal();
 };
 
