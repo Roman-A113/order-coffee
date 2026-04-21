@@ -64,6 +64,12 @@ function getDrinkDeclension(count) {
     return "напитков";
 }
 
+function highlightImportantWords(text) {
+    const wordsToHighlight = ["срочно", "быстрее", "побыстрее", "скорее", "поскорее", "очень нужно"];
+    const pattern = new RegExp(`(${wordsToHighlight.join("|")})`, "gi");
+    return text.replace(pattern, "<b>$1</b>");
+}
+
 submitButton.onclick = function (event) {
     event.preventDefault();
     tableBody.innerHTML = "";
@@ -71,16 +77,17 @@ submitButton.onclick = function (event) {
     const beverages = document.querySelectorAll(".beverage");
     beverages.forEach((beverage) => {
         const drink = beverage.querySelector("select").options[beverage.querySelector("select").selectedIndex].text;
-        
+
         const milkRadio = beverage.querySelector('input[name^="milk"]:checked');
         const milk = milkRadio ? milkRadio.nextElementSibling.textContent : "Не выбрано";
-        
-        const options = Array.from(beverage.querySelectorAll('input[name="options"]:checked'))
-            .map((checkbox) => checkbox.nextElementSibling.textContent)
-            .join(", ") || "Без добавок";
-            
+
+        const options =
+            Array.from(beverage.querySelectorAll('input[name="options"]:checked'))
+                .map((checkbox) => checkbox.nextElementSibling.textContent)
+                .join(", ") || "Без добавок";
+
         const notesEl = beverage.querySelector("textarea");
-        const notes = notesEl ? notesEl.value.trim() || "—" : "—";
+        const notes = highlightImportantWords(notesEl.value.trim());
 
         const row = `<tr>
             <td>${drink}</td>
