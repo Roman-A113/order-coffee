@@ -94,3 +94,9 @@ dialog {
     cursor: pointer;
     color: #333;
 }
+
+#order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}

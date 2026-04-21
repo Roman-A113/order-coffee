@@ -3,7 +3,8 @@ const form = document.querySelector("form");
 const modal = document.querySelector("#order-modal");
 const closeButton = document.querySelector("#close-modal");
 const submitButton = document.querySelector(".submit-button");
-const modalMessage = document.querySelector("#modal-message"); 
+const modalMessage = document.querySelector("#modal-message");
+const tableBody = document.querySelector("#table-body");
 
 function updateBeverages() {
     const beverages = document.querySelectorAll(".beverage");
@@ -54,20 +55,36 @@ function getDrinkDeclension(count) {
     const lastDigit = count % 10;
 
     if (lastTwoDigits > 10 && lastTwoDigits < 20) return "напитков";
-    
+
     if (lastDigit === 1) return "напиток";
     if (lastDigit >= 2 && lastDigit <= 4) return "напитка";
-    
+
     return "напитков";
 }
 
 submitButton.onclick = function (event) {
     event.preventDefault();
-    
-    const beverageCount = document.querySelectorAll(".beverage").length;
-    const declension = getDrinkDeclension(beverageCount);
-    
-    modalMessage.textContent = `Вы заказали ${beverageCount} ${declension}`;
+    tableBody.innerHTML = "";
+
+    const beverages = document.querySelectorAll(".beverage");
+    beverages.forEach((beverage) => {
+        const drink = beverage.querySelector("select").options[beverage.querySelector("select").selectedIndex].text;
+        const milk = beverage.querySelector('input[name^="milk"]:checked').nextElementSibling.textContent;
+        const options = Array.from(beverage.querySelectorAll('input[name="options"]:checked'))
+            .map((checkbox) => checkbox.nextElementSibling.textContent)
+            .join(", ");
+
+        const row = `<tr>
+            <td>${drink}</td>
+            <td>${milk}</td>
+            <td>${options}</td>
+        </tr>`;
+        tableBody.insertAdjacentHTML("beforeend", row);
+    });
+
+    const declension = getDrinkDeclension(beverages.length);
+    modalMessage.textContent = `Вы заказали ${beverages.length} ${declension}`;
+
     modal.showModal();
 };
 
