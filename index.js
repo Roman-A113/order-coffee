@@ -21,3 +21,16 @@ addButton.addEventListener("click", () => {
     });
     form.insertBefore(newBeverage, addButton.parentElement);
 });
+
+const modal = document.querySelector("#order-modal");
+const closeButton = document.querySelector("#close-modal");
+const submitButton = document.querySelector(".submit-button");
+
+submitButton.onclick = function (event) {
+    event.preventDefault();
+    modal.showModal();
+};
+
+closeButton.onclick = function () {
+    modal.close();
+};
