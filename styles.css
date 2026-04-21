@@ -111,3 +111,17 @@ dialog {
     border-collapse: collapse;
     margin-top: 15px;
 }
+
+#order-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+#order-table th,
+#order-table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    word-wrap: break-word;
+    white-space: normal;
+}
