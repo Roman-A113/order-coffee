@@ -35,6 +35,9 @@ addButton.addEventListener("click", () => {
         input.checked = false;
     });
 
+    const textarea = newBeverage.querySelector("textarea");
+    if (textarea) textarea.value = "";
+
     form.insertBefore(newBeverage, addButton.parentElement);
     updateBeverages();
 });
@@ -55,7 +58,6 @@ function getDrinkDeclension(count) {
     const lastDigit = count % 10;
 
     if (lastTwoDigits > 10 && lastTwoDigits < 20) return "напитков";
-
     if (lastDigit === 1) return "напиток";
     if (lastDigit >= 2 && lastDigit <= 4) return "напитка";
 
@@ -69,15 +71,22 @@ submitButton.onclick = function (event) {
     const beverages = document.querySelectorAll(".beverage");
     beverages.forEach((beverage) => {
         const drink = beverage.querySelector("select").options[beverage.querySelector("select").selectedIndex].text;
-        const milk = beverage.querySelector('input[name^="milk"]:checked').nextElementSibling.textContent;
+        
+        const milkRadio = beverage.querySelector('input[name^="milk"]:checked');
+        const milk = milkRadio ? milkRadio.nextElementSibling.textContent : "Не выбрано";
+        
         const options = Array.from(beverage.querySelectorAll('input[name="options"]:checked'))
             .map((checkbox) => checkbox.nextElementSibling.textContent)
-            .join(", ");
+            .join(", ") || "Без добавок";
+            
+        const notesEl = beverage.querySelector("textarea");
+        const notes = notesEl ? notesEl.value.trim() || "—" : "—";
 
         const row = `<tr>
             <td>${drink}</td>
             <td>${milk}</td>
             <td>${options}</td>
+            <td>${notes}</td>
         </tr>`;
         tableBody.insertAdjacentHTML("beforeend", row);
     });
